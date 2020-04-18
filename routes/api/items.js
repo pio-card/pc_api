@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const auth = require("../../middleware/auth");
 //Item Model.. we need thsi to make queries like Item.find and save...
-const Item = require("../../models/item");
+const Item = require("../../models/Item");
 
 // @route  GET api/items
 // @desc   Get All Items
@@ -28,6 +28,59 @@ router.post("/", auth, (req, res) => {
   newItem.save().then(item => res.json(item));
 });
 
+/* router.put("/:id", auth, function(req, res) {
+  var items = req.body;
+  var user_id = req.params.id;
+  Item.update({ _id: user_id }, items, function(err, items) {
+    if (!err) {
+      res.json("okay");
+    } else {
+      res.write("fail");
+    }
+  });
+}); */
+// @route  UPDATE api/items/:id
+// @desc   Update an Item
+// @access Private(because of auth parameter)
+/* router.put("/:id", auth, (req, res) => {
+  Item.findById(req.params.id).then(item => {
+    item
+      .update()
+      .then(() => res.json({ success: true }))
+      // return 404 if not found
+      .catch(err => res.status(404).json({ success: false }));
+  });
+}); */
+
+/* router.put("/:id", auth, (req, res) => {
+  Item.findById(req.params.id)
+    .then(item => item.update().then(() => res.json({ success: true })))
+    //we wanna send back a response with a status
+    .catch(err => res.status(404).json({ success: false }));
+}); */
+
+/* router.put("/:id", auth, (req, res) => {
+  //fetch the id from the URI with req.params.id,
+  Item.findById(req.params.id)
+    //pass in the item we are searching for and then remove it, gives promise in which we put in a callback, we can return any response in that callback.
+    .then(item => item.update().then(() => res.json({ success: true })))
+    //we wanna send back a response with a status
+    .catch(err => res.status(404).json({ success: false }));
+}); */
+
+router.put("/:id", auth, (req, res) => {
+  Item.findByIdAndUpdate(req.params.id, { name: req.body.name }, function(
+    err,
+    result
+  ) {
+    if (err) {
+      res.send(err);
+    } else {
+      res.send(result);
+    }
+  });
+});
+
 // @route  DELETE api/items/:id
 // @desc   Dekete an Item
 // @access Private(because of auth parameter)
@@ -39,7 +92,5 @@ router.delete("/:id", auth, (req, res) => {
     //we wanna send back a response with a status
     .catch(err => res.status(404).json({ success: false }));
 });
-
-//the Item is for now only in memory so we save the new Item onto the database, and the promised based retorun spits out the item
 
 module.exports = router;
