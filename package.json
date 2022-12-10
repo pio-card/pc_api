@@ -17,7 +17,7 @@
     "audit": "0.0.6",
     "bcryptjs": "^2.4.3",
     "config": "^3.0.1",
-    "express": "^4.16.4",
+    "express": "^4.17.3",
     "fix": "0.0.6",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.4.19",
